@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  webapp:
+    container_name: razorpagesmovie
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    hostname: webapp
+    networks: 
+      - "webapp_net"
+    depends_on:
+      - localdb
+  localdb:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    cap_add: [ 'SYS_PTRACE' ]
+    environment:
+      - "ACCEPT_EULA=1"
+      - "MSSQL_SA_PASSWORD=yourStrong(!)Password"
+    ports:
+      - "1433:1433"
+    hostname: localdb
+    networks: 
+      - "webapp_net"
+
+networks:
+  webapp_net:
+    driver: bridge
