@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  webapp:
+    container_name: razorpagesmovie
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    hostname: webapp
+    networks: 
+      - "webapp_net"
+    depends_on:
+      - localdb
+  localdb:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    hostname: localdb
+    networks: 
+      - "webapp_net"
+
+networks:
+  webapp_net:
+    driver: bridge

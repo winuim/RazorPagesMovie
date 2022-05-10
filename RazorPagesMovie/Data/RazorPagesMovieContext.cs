@@ -13,6 +13,7 @@ namespace RazorPagesMovie.Data
         public RazorPagesMovieContext(DbContextOptions<RazorPagesMovieContext> options)
             : base(options)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             Database.Migrate();
         }
 
